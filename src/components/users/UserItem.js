@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const UserItem = (props)=>  {
-        const { login, avatar_url, html_url } = props.user;
+        const { login, avatar_url } = props.user;
         return (
             <div className="card text-center">
                 <img 
@@ -13,7 +14,7 @@ const UserItem = (props)=>  {
                 </img>
                 <h3>{login}</h3>
                 <div>
-                    <a className="btn btn-dark btn-sm my-1" href={html_url}>More</a>
+                    <Link className="btn btn-dark btn-sm my-1" to={`/user/${login}`}>More</Link>
                 </div>
             </div>
         )
