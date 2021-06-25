@@ -2,23 +2,26 @@ import React, { Component, Fragment } from 'react';
 import { Spinner } from '../layout/Spinner';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import  Repos  from '../repos/Repos';
 
 export class User extends Component {
     componentDidMount(){
         this.props.getUser(this.props.match.params.login);
+        this.props.getUserRepos(this.props.match.params.login);
     };
 
     static propTypes = {
         loading: PropTypes.bool.isRequired,
         user: PropTypes.object.isRequired,
-        getUser: PropTypes.func.isRequired
+        getUser: PropTypes.func.isRequired,
+        getUserRepos: PropTypes.func.isRequired,
+        repos: PropTypes.array.isRequired
     }
 
     render() {
         const { 
             name, 
             avatar_url, 
-            url, 
             location, 
             bio, 
             blog, 
@@ -28,10 +31,11 @@ export class User extends Component {
             following, 
             public_repos,
             public_gists,
-            hireable
+            hireable,
+            company
         } = this.props.user;
 
-        const { loading } = this.props;
+        const { loading, repos } = this.props;
 
         if(loading) return <Spinner/>
 
@@ -56,7 +60,7 @@ export class User extends Component {
                                 <p>{bio}</p>    
                             </Fragment>
                         )}
-                        <a href={html_url} className="btn btn-dark my-1" target="_blank">Visit GitHub Profile</a>
+                        <a href={html_url} className="btn btn-dark my-1" rel="noreferrer" target="_blank">Visit GitHub Profile</a>
                         <ul>
                             <li>
                                 {login && (
@@ -65,9 +69,30 @@ export class User extends Component {
                                     </Fragment>
                                 )}
                             </li>
+                            <li>
+                                {company && (
+                                    <Fragment>
+                                        <strong>Company: </strong>{company}
+                                    </Fragment>
+                                )}
+                            </li>
+                            <li>
+                                {blog && (
+                                    <Fragment>
+                                        <strong>Website: </strong>{blog}
+                                    </Fragment>
+                                )}
+                            </li>
                         </ul>
                     </div>
                 </div>
+                <div className="card text-center">
+                    <div className="badge badge-primary">Followers: {followers}</div>
+                    <div className="badge badge-success">Following: {following}</div>
+                    <div className="badge badge-light">Public Repos: {public_repos}</div>
+                    <div className="badge badge-dark">Public Gists: {public_gists}</div>
+                </div>
+                <Repos repos={repos}></Repos>
             </Fragment>
         )
     }
